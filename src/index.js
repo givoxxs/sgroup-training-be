@@ -1,12 +1,11 @@
 import express from 'express';
+import fs from 'fs';
+import routers from './apis';
+const app = express();
 
-const app = express()
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    // req.user; 
-    // check ai login chua
-    res.send('Hello World!')
-})
+app.use('/api', routers);
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
