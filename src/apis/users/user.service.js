@@ -1,42 +1,29 @@
-import fs from 'fs';
-import UsersDao from '../../service/UsersDao';
-
+import pool from '../../config/dbConfig';
 class UserService {
     // get All Users
-    getUsers() {
-        const users = UsersDao.readUsers();
-        return users;
+    async getUsers() {
+        const [rows, fields] = await pool.query('SELECT * FROM users');
+        return rows;
     }
     // get User by Id
-    getUserById(id) {
-        let users = this.getUsers();
-        console.log("id: ", id)
-        const index = users.findIndex(user => user.id === parseInt(id))
-        console.log("users: ", users[index])
-        return users[index];
+    async getUserById(id) {
+        const [rows, fields] = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
+        console.log("user: ", rows[0]);
+        return rows[0];
     }
     // create new user 
-    createUser(newUser) {
-        let users = this.getUsers();
-        users.sort((a, b) => a.id - b.id);
-        const lastId = users.length ? users[users.length - 1].id + 1 : 1;
-        newUser.id = lastId;
-        users.push(newUser);
-        UsersDao.writeUsers(users)
+    async createUser(newUser) {
+        const result = await pool.query('INSERT INTO users (name, email) VALUES (?, ?)', [newUser.name, newUser.email]);
+        newUser.id = result[0].insertId;
+        return newUser;
     }
     // update user
-    updateUser(id, userUpdate) {
-        let users = this.getUsers();
-        const index = users.findIndex(user => user.id === parseInt(id))
-        users[index] = userUpdate;
-        UsersDao.writeUsers(users);
+    async updateUser(id, userUpdate) {
+        await pool.query('UPDATE users SET name = ?, email = ? WHERE id = ?', [userUpdate.name, userUpdate.email, id]);
     }
     // delete user
-    deleteUser(id) {
-        let users = this.getUsers();
-        const index = users.findIndex(user => user.id === parseInt(id))
-        users.splice(index, 1);
-        UsersDao.writeUsers(users);
+    async deleteUser(id) {
+        await pool.query('DELETE FROM users WHERE id = ?', [id]);
     }
 }
 
