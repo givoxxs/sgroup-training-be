@@ -28,7 +28,10 @@ class UserController {
         try {
             const newUser = {
               name: req.body.name,
-              email: req.body.email
+              email: req.body.email,
+              password: req.body.password,
+              gender: req.body.gender,
+              age: req.body.age
             };
             const createdUser = await userService.createUser(newUser);
             return res.status(201).json(createdUser);
@@ -48,7 +51,10 @@ class UserController {
             user = {
               ...user,
               name: req.body.name,
-              email: req.body.email
+              email: req.body.email,
+              password: req.body.password,
+              gender: req.body.gender,
+              age: req.body.age
             };
       
             await userService.updateUser(id, user);
