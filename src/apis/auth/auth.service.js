@@ -33,16 +33,20 @@ class AuthService {
             return { status: 401, message: 'Invalid username or password' };
             //throw error;
         }
+        console.log(req.headers.authentication);
     }
     
     async forgotPassword(email) {
         try {
             const user = await this.userModel.getUserByEmail(email);
+            console.log('user ở service: ', user);
             if (user == null) {
                 return new Error('User not found');
             }
             const resetToken = await this.userIdentityService.generateResetToken(user);
-            await mailService.sendMail(email, 'Password Reset', `Your reset token is: ${resetToken}`);
+            const text = `Your reset token is: ${resetToken}`;
+            const html = `<p>Your reset token is: <strong>${resetToken}</strong></p>`;
+            await mailService.sendMail(email, 'Password Reset', text, html);
             return { status: 200, message: 'Reset token sent to email' };
         } catch (error) {
             console.log('Error sending reset token:', error);
@@ -53,12 +57,14 @@ class AuthService {
     async resetPassword(resetToken, newPassword) {
         try {
             const userId = this.userIdentityService.verifyResetToken(resetToken);
-            const user = await this.userModel.getUserById(userId);
+            console.log("userId: ", userId);
+            console.log("newPassword: ", newPassword);
+            const user = await this.userModel.getUserById(userId.id);
             if (user == null) {
                 return new Error('User not found');
             }
             const hashedPassword = await hashPassword(newPassword);
-            await this.userModel.updatePassword(userId, hashedPassword);
+            await this.userModel.updatePassword(userId.id, hashedPassword);
             return { status: 200, message: 'Password reset successfully' };
         } catch (error) {
             console.log('Error resetting password:', error);

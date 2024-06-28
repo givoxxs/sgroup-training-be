@@ -7,6 +7,7 @@ dotenv.config();
 class UserIdentityService {
     constructor() {
         this.JWT_SECRET = process.env.JWT_SECRET;
+        this.JWT_RESET_SECRET = process.env.JWT_RESET_SECRET
         // if (!this.JWT_SECRET) {
         //     throw new Error('JWT_SECRET is not defined');
         // }

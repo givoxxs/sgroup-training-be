@@ -45,7 +45,10 @@ class AuthController {
 
     resetPassword = async (req, res, next) => {
       console.log("vao resetPassword ne");
-      const { token, password } = req.body;
+      const token = req.headers['authorization'];
+      const { password } = req.body;
+      // const { token, password } = req.body;
+      console.log
       console.log({ token, password });
       const result = await AuthService.resetPassword(token, password);
       if (result.status !== 200) {
