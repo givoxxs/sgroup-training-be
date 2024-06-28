@@ -1,6 +1,9 @@
 import express from 'express';
 import fs from 'fs';
 import routers from './apis';
+import dotenv from 'dotenv';
+
+dotenv.config();
 const app = express();
 
 app.use(express.json());

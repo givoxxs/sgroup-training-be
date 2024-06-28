@@ -1,13 +1,14 @@
 import mysql from 'mysql2/promise';
 
+
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'sgroupbe',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+  host: 'localhost',
+  user: 'root',
+  port: 3306,
+  password: '',
+  database: 'sgroup',
+  waitForConnections: true,
+  connectionLimit: 10,
 });
 
 pool.getConnection((err, connection) => {
@@ -21,12 +22,14 @@ pool.getConnection((err, connection) => {
         if (err.code === 'ECONNREFUSED') {
         console.error('Database connection was refused.');
         }
+
+
     }
+    console.log("vo day ne");
     
     if (connection) connection.release();
     
     return;
     }
 );
-
 export default pool;
