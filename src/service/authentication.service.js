@@ -8,9 +8,6 @@ class UserIdentityService {
     constructor() {
         this.JWT_SECRET = process.env.JWT_SECRET;
         this.JWT_RESET_SECRET = process.env.JWT_RESET_SECRET
-        // if (!this.JWT_SECRET) {
-        //     throw new Error('JWT_SECRET is not defined');
-        // }
     }
 
     async sign(user) {
@@ -20,7 +17,7 @@ class UserIdentityService {
         return jwt.verify(token, this.JWT_SECRET);
     }
     generateResetToken(user) {
-        return jwt.sign({id: user.ID}, this.JWT_RESET_SECRET, { expiresIn: '1h', algorithm: 'HS256' });
+        return jwt.sign({id: user.ID}, this.JWT_RESET_SECRET, { expiresIn: '10m', algorithm: 'HS256' });
     }
 
     verifyResetToken(token) {

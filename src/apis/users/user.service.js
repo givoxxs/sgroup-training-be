@@ -24,7 +24,6 @@ class UserService {
     const { salt, passwordHashed } = hashPassword(user.password);
     user.salt = salt;
     user.password = passwordHashed;
-    user.forgetPasswordToken = passwordHashed;
     return await this.userModel.createUser(user);
   }
 

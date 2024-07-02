@@ -3,6 +3,7 @@ import UserModel from "../../model/user.model";
 import { hashPassword, hashPasswordSalt } from "../../service/hash.service";
 import { UserIdentityService } from '../../service';
 import mailService from "../../service/mail.service";
+import userService from "../users/user.service";
 
 class AuthService {
     constructor() {
@@ -10,61 +11,85 @@ class AuthService {
         this.userModel = new UserModel();
         this.userIdentityService = new UserIdentityService();
     }
-    
+     
     async login(loginDTO) {
         try {
             const user = await this.userModel.getUserByUsername(loginDTO.username);
-            console.log('user ne:' , user);
+            console.log('USER:' , user);
 
             if (user == null) {
                 return new Error('User not found');
             }
             const password = await hashPasswordSalt(user.SALT, loginDTO.password);
-            console.log('password ne:' , password);
-            console.log(user.PASSWORD)
+            // console.log('PASSWORD loginDTO:' , password);
+            // console.log('PASSWORD USER',user.PASSWORD)
             if (password !== user.PASSWORD) {
                 return new Error('Invalid password');
             }
             const token = await this.userIdentityService.sign(user);
-            console.log('token:', token);
-            return token;
+            console.log('TOKEN:', token);
+            return { user, token};
         } catch (error) {
             console.log('Error logging in:', error);
             return { status: 401, message: 'Invalid username or password' };
-            //throw error;
         }
-        console.log(req.headers.authentication);
     }
     
     async forgotPassword(email) {
         try {
             const user = await this.userModel.getUserByEmail(email);
-            console.log('user ở service: ', user);
+            console.log('USER: ', user);
             if (user == null) {
-                return new Error('User not found');
+                return { status: 400, message: 'Email does not exist' };
             }
-            const resetToken = await this.userIdentityService.generateResetToken(user);
-            const text = `Your reset token is: ${resetToken}`;
-            const html = `<p>Your reset token is: <strong>${resetToken}</strong></p>`;
-            await mailService.sendMail(email, 'Password Reset', text, html);
+    
+            const resetToken = this.userIdentityService.generateResetToken(user);
+    
+            const expiration = new Date(Date.now() + 10 * 60 * 1000);
+    
+            await this.userModel.updatePasswordResetToken(user.ID, resetToken, expiration);
+            
+            const subject = 'Email Verification - Password Reset Request';
+            const resetPasswordUrl = `http://your-app-link/reset-password?token=${resetToken}`;
+            const text = `Dear ${user.NAME},
+                To reset your password, click on this link: ${resetPasswordUrl}
+                If you did not request a password reset, please ignore this email.`;
+            
+            const html = `
+                <p>Dear ${user.NAME},</p>
+                <p>To reset your password, click on the following link:</p>
+                <p><a href="${resetPasswordUrl}">Reset Password</a></p>
+                <p>If you did not request a password reset, please ignore this email.</p>
+                <p>Best regards,</p>
+                <p>Your Company Name</p>
+            `;
+            
+            await mailService.sendMail(email, subject, text, html);
+    
             return { status: 200, message: 'Reset token sent to email' };
         } catch (error) {
             console.log('Error sending reset token:', error);
             return { status: 401, message: 'Invalid email' };
         }
     }
+    
 
     async resetPassword(resetToken, newPassword) {
         try {
-            const userId = this.userIdentityService.verifyResetToken(resetToken);
-            console.log("userId: ", userId);
+            const resetPasswordTokenDoc = this.userIdentityService.verifyResetToken(resetToken);
+            console.log("resetPasswordTokenDoc: ", resetPasswordTokenDoc);
             console.log("newPassword: ", newPassword);
-            const user = await this.userModel.getUserById(userId.id);
-            if (user == null) {
-                return new Error('User not found');
+
+            const user = await this.userModel.getUserById(resetPasswordTokenDoc.id);
+
+            console.log('USERS:', user);
+
+            if (user == null || user.FORGET_PASSWORD_TOKEN_EXPIRATION < new Date()) {
+                return { status: 400, message: 'Invalid or expired reset token' };
             }
-            const hashedPassword = await hashPassword(newPassword);
-            await this.userModel.updatePassword(userId.id, hashedPassword);
+
+            const { salt, passwordHashed } = hashPassword(newPassword);
+            await this.userModel.updatePassword(resetPasswordTokenDoc.id, passwordHashed, salt);
             return { status: 200, message: 'Password reset successfully' };
         } catch (error) {
             console.log('Error resetting password:', error);

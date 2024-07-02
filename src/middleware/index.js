@@ -1,1 +1,1 @@
-export * from './verify.middleware.js'
+export * as verifyMiddleware from './verify.middleware.js'

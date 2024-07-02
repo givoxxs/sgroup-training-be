@@ -52,16 +52,27 @@ class UserModel {
     return await this.db.update('USERS', data, 'ID = ?', [id]);
   }
 
-  async updatePassword(id, hashedPassword) {
+  async updatePassword(id, hashedPassword, salt) {
     const data = {
-      PASSWORD: hashedPassword
+      SALT: salt,
+      PASSWORD: hashedPassword,
+      FORGET_PASSWORD_TOKEN : null,
+      FORGET_PASSWORD_TOKEN_EXPIRATION: null,
+
     };
     return await this.db.update('USERS', data, 'ID = ?', [id]);
-  
   }
 
   async deleteUser(id) {
     return await this.db.delete('USERS', 'ID = ?', [id]);
+  }
+
+  async updatePasswordResetToken(userId, resetToken, expiration) {
+    const data = {
+      FORGET_PASSWORD_TOKEN: resetToken,
+      FORGET_PASSWORD_TOKEN_EXPIRATION: expiration
+    };
+    return await this.db.update('USERS', data, 'ID = ?', [userId]);
   }
 }
 
