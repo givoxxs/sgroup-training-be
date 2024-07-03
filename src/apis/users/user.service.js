@@ -20,6 +20,10 @@ class UserService {
     return await this.userModel.getUserByUsername(username);
   }
 
+  async getUserByEmail(email) {
+    return await this.userModel.getUserByEmail(email);
+  }
+
   async createUser(user) {
     const { salt, passwordHashed } = hashPassword(user.password);
     user.salt = salt;

@@ -38,6 +38,11 @@ class UserModel {
     return users[0];
   }
 
+  async getUserByEmail(email) {
+    const users = await this.db.select('SELECT * FROM USERS WHERE EMAIL = ?', [email]);
+    return users[0];
+  }
+
   async updateUser(id, user) {
     const data = {
       NAME: user.NAME,

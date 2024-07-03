@@ -25,7 +25,8 @@ class AuthController {
               email: req.body.email,
             };
             const existingUser = await userService.getUserByUsername(newUser.username);
-            if (existingUser) {
+            const existingEmail = await userService.getUserByEmail(newUser.email);
+            if (existingUser || existingEmail) {
               return res.status(409).json({ message: 'Username or email already exists.' });
             }
             await userService.createUser(newUser);

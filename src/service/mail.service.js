@@ -12,7 +12,6 @@ export  const mailConfig = {
 
   const mailService = {
     async sendMail (emailTo, subject, text, html) {
-      console.log(mailConfig);
       const transporter = nodemailer.createTransport(mailConfig);
   
       transporter.sendMail({
