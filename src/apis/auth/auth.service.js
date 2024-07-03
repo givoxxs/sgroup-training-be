@@ -44,10 +44,13 @@ class AuthService {
             }
     
             const resetToken = this.userIdentityService.generateResetToken(user);
+
+            const timeNow = new Date(Date.now());
     
             const expiration = new Date(Date.now() + 10 * 60 * 1000);
     
             await this.userModel.updatePasswordResetToken(user.ID, resetToken, expiration);
+            
             
             const subject = 'Email Verification - Password Reset Request';
             const resetPasswordUrl = `http://your-app-link/reset-password?token=${resetToken}`;
@@ -56,6 +59,7 @@ class AuthService {
                 If you did not request a password reset, please ignore this email.`;
             
             const html = `
+                <p>Now: ${timeNow}</p>
                 <p>Dear ${user.NAME},</p>
                 <p>To reset your password, click on the following link:</p>
                 <p><a href="${resetPasswordUrl}">Reset Password</a></p>
