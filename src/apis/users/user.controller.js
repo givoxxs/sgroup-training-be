@@ -13,7 +13,6 @@ class UserController {
     // get users by id
     async  getUserById(req, res, next) {
         try {
-          console.log('User now: ', req.user.id);
           const id = parseInt(req.user.id);
           const user = await userService.getUserById(id);
           if (user) {
@@ -50,7 +49,6 @@ class UserController {
         try {
             const id = parseInt(req.params.id);
             let user = await userService.getUserById(id);
-            console.log('user find', user);
             if (!user) {
               return res.status(404).json({ message: 'User does not exist.' });
             }
@@ -64,7 +62,6 @@ class UserController {
               PASSWORD: req.body.password === undefined  ? user.PASSWORD : req.body.password,
               EMAIL: req.body.email === undefined  ? user.EMAIL : req.body.email,
             };
-            console.log('user controller', user)
 
             const existingUser = await userService.getUserByUsername(user.username);
             if (existingUser) {

@@ -27,7 +27,6 @@ pool.getConnection((err, connection) => {
 
 
     }
-    console.log("vo day ne");
     
     if (connection) connection.release();
     

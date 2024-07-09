@@ -6,78 +6,122 @@ class UserModel {
   }
 
   async getAllUsers() {
-    return await this.db.select('SELECT * FROM USERS');
+    try {
+      return await this.db.select('SELECT * FROM USERS');
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getUserById(id) {
-    const users = await this.db.select('SELECT * FROM USERS WHERE ID = ?', [id]);
-    return users[0];
+    try {
+      const users = await this.db.select('SELECT * FROM USERS WHERE ID = ?', [id]);
+      return users[0];
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async createUser(user) {
-    const data = {
-      NAME: user.name,
-      GENDER: user.gender,
-      USERNAME: user.username,
-      AGE: user.age,
-      PASSWORD: user.password,
-      EMAIL: user.email,
-      SALT: user.salt,
-      FORGET_PASSWORD_TOKEN: user.forgetPasswordToken
-    };
-    return await this.db.insert('USERS', data);
+    try {
+      const data = {
+        NAME: user.name,
+        GENDER: user.gender,
+        USERNAME: user.username,
+        AGE: user.age,
+        PASSWORD: user.password,
+        EMAIL: user.email,
+        SALT: user.salt,
+        FORGET_PASSWORD_TOKEN: user.forgetPasswordToken
+      };
+
+      return await this.db.insert('USERS', data);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getUserByUsername(username) {
-    const users = await this.db.select('SELECT * FROM USERS WHERE USERNAME = ?', [username]);
-    return users[0];
+    try {
+      const users = await this.db.select('SELECT * FROM USERS WHERE USERNAME = ?', [username]);
+      return users[0];
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getUserByEmail(email) {
-    const users = await this.db.select('SELECT * FROM USERS WHERE EMAIL = ?', [email]);
-    return users[0];
+    try {
+      const users = await this.db.select('SELECT * FROM USERS WHERE EMAIL = ?', [email]);
+      return users[0];
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getUserByEmail(email) {
-    const users = await this.db.select('SELECT * FROM USERS WHERE EMAIL = ?', [email]);
-    return users[0];
+    try {
+      const users = await this.db.select('SELECT * FROM USERS WHERE EMAIL = ?', [email]);
+      return users[0];
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async updateUser(id, user) {
-    const data = {
-      NAME: user.NAME,
-      GENDER: user.GENDER,
-      USERNAME: user.USERNAME,
-      AGE: user.AGE,
-      PASSWORD: user.PASSWORD,
-      EMAIL: user.EMAIL,
-      SALT: user.SALT,
-      FORGET_PASSWORD_TOKEN: user.FORGET_PASSWORD_TOKEN
-    };
-    return await this.db.update('USERS', data, 'ID = ?', [id]);
+    try {
+      const data = {
+        NAME: user.NAME,
+        GENDER: user.GENDER,
+        USERNAME: user.USERNAME,
+        AGE: user.AGE,
+        PASSWORD: user.PASSWORD,
+        EMAIL: user.EMAIL,
+        SALT: user.SALT,
+        FORGET_PASSWORD_TOKEN: user.FORGET_PASSWORD_TOKEN
+      };
+
+      return await this.db.update('USERS', data, 'ID = ?', [id]);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async updatePassword(id, hashedPassword, salt) {
-    const data = {
-      SALT: salt,
-      PASSWORD: hashedPassword,
-      FORGET_PASSWORD_TOKEN : null,
-      FORGET_PASSWORD_TOKEN_EXPIRATION: null,
+    try {
+      const data = {
+        SALT: salt,
+        PASSWORD: hashedPassword,
+        FORGET_PASSWORD_TOKEN : null,
+        FORGET_PASSWORD_TOKEN_EXPIRATION: null,
+  
+      };
 
-    };
-    return await this.db.update('USERS', data, 'ID = ?', [id]);
+      return await this.db.update('USERS', data, 'ID = ?', [id]);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async deleteUser(id) {
-    return await this.db.delete('USERS', 'ID = ?', [id]);
+    try {
+      return await this.db.delete('USERS', 'ID = ?', [id]);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async updatePasswordResetToken(userId, resetToken, expiration) {
-    const data = {
-      FORGET_PASSWORD_TOKEN: resetToken,
-      FORGET_PASSWORD_TOKEN_EXPIRATION: expiration
-    };
-    return await this.db.update('USERS', data, 'ID = ?', [userId]);
+    try {
+      const data = {
+        FORGET_PASSWORD_TOKEN: resetToken,
+        FORGET_PASSWORD_TOKEN_EXPIRATION: expiration
+      };
+
+      return await this.db.update('USERS', data, 'ID = ?', [userId]);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
 

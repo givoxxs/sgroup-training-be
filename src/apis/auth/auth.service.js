@@ -15,19 +15,14 @@ class AuthService {
     async login(loginDTO) {
         try {
             const user = await this.userModel.getUserByUsername(loginDTO.username);
-            console.log('USER:' , user);
-
             if (user == null) {
                 return new Error('User not found');
             }
             const password = await hashPasswordSalt(user.SALT, loginDTO.password);
-            // console.log('PASSWORD loginDTO:' , password);
-            // console.log('PASSWORD USER',user.PASSWORD)
             if (password !== user.PASSWORD) {
                 return new Error('Invalid password');
             }
             const token = await this.userIdentityService.sign(user);
-            console.log('TOKEN:', token);
             return { user, token};
         } catch (error) {
             console.log('Error logging in:', error);
@@ -38,7 +33,6 @@ class AuthService {
     async forgotPassword(email) {
         try {
             const user = await this.userModel.getUserByEmail(email);
-            console.log('USER: ', user);
             if (user == null) {
                 return { status: 400, message: 'Email does not exist' };
             }
@@ -51,7 +45,8 @@ class AuthService {
     
             await this.userModel.updatePasswordResetToken(user.ID, resetToken, expiration);
             
-            
+            console.log('reset password: ', resetToken);
+
             const subject = 'Email Verification - Password Reset Request';
             const resetPasswordUrl = `http://your-app-link/reset-password?token=${resetToken}`;
             const text = `Dear ${user.NAME},
@@ -81,12 +76,8 @@ class AuthService {
     async resetPassword(resetToken, newPassword) {
         try {
             const resetPasswordTokenDoc = this.userIdentityService.verifyResetToken(resetToken);
-            console.log("resetPasswordTokenDoc: ", resetPasswordTokenDoc);
-            console.log("newPassword: ", newPassword);
 
             const user = await this.userModel.getUserById(resetPasswordTokenDoc.id);
-
-            console.log('USERS:', user);
 
             if (user == null || user.FORGET_PASSWORD_TOKEN_EXPIRATION < new Date()) {
                 return { status: 400, message: 'Invalid or expired reset token' };
