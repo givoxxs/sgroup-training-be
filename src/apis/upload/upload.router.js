@@ -1,10 +1,10 @@
-import { Router } from "express";
+import express from 'express';
 import uploadController from "./upload.controller";
 import { verifyMiddleware } from "../../middleware";
+import { uploadCloud } from '../../middleware/uploadIMG'
 
+const router = express.Router();
 
-const router = Router();
-
-router.post('/uploadImage', verifyMiddleware.verify, uploadController.uploadImage)
+router.post('/uploadImage', verifyMiddleware.verify, uploadCloud.single('images'), uploadController.uploadImage)
 
 export default router;

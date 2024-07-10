@@ -1,5 +1,6 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv'
+import Database from "../../database/query";
+import UserModel from "../../model/user.model";
+import { UserIdentityService } from '../../service';
 
 class UploadService {
     constructor() {
@@ -12,23 +13,17 @@ class UploadService {
         try {
             const user = await this.userModel.getUserById(id);
 
+            console.log('USER in update: ', user);
+
             if (!user) {
                 return { success: false, status: 404, message: "User not found" };
             }
 
-            user.avatar = result.url;
+            user.AVATAR = result.url;
             return await this.userModel.updateUser(id, user);
-
-            // return {
-            //     success: true,
-            //     data: {
-            //         url: result.url,
-            //         publicId: result.public_id
-            //     }
             // };
         } catch (error) {
-            // console.error('Error updating user:', error);
-            // return { success: false, status: 500, message: "Database error" };
+            throw error;
         }
     }
 }

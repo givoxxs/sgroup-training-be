@@ -1,5 +1,5 @@
 import cloudinary from "../../config/cloudinaryConfig";
-
+import { uploadService }  from './index'
 class UploadController {
     uploadImage = async(req, res, next) => {
         try {
@@ -10,8 +10,9 @@ class UploadController {
             const image = req.file.path;
             const result = await cloudinary.uploader.upload(image);
             console.log('RESULT IN UPLOAD IMAGE: ', result);
-            const resUpdate = await uploadService.updateUser(id, result);
+            await uploadService.updateUser(id, result);
 
+            return res.status(201).json("Update success!");
         } catch (error) {
             console.log('Upload image error: ', error.message);
             next(error);

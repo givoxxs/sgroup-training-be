@@ -3,7 +3,6 @@ import UserModel from "../../model/user.model";
 import { hashPassword, hashPasswordSalt } from "../../service/hash.service";
 import { UserIdentityService } from '../../service';
 import mailService from "../../service/mail.service";
-import userService from "../users/user.service";
 
 class AuthService {
     constructor() {

@@ -1,13 +1,15 @@
-import cloudinary from '../service/cloudinaryConfig';
+import cloudinary from '../config/cloudinaryConfig';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
-require('dotenv').config();
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  allowedFormats: ['jpg', 'png'],
+  allowedFormats: ['jpg', 'png', 'jpeg'],
   params: {
-    folder: 'byteUndefine_GuideConnect'
+    folder: 'Sgroup_training_1'
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname); 
@@ -16,4 +18,6 @@ const storage = new CloudinaryStorage({
 
 const uploadCloud = multer({ storage });
 
-module.exports = {uploadCloud};
+export {
+  uploadCloud
+}
