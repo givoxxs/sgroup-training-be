@@ -12,7 +12,7 @@ class UploadController {
             console.log('RESULT IN UPLOAD IMAGE: ', result);
             await uploadService.updateUser(id, result);
 
-            return res.status(201).json("Update success!");
+            return res.status(201).json("Upload image success!");
         } catch (error) {
             console.log('Upload image error: ', error.message);
             next(error);
