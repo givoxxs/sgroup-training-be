@@ -32,7 +32,8 @@ class UserModel {
         PASSWORD: user.password,
         EMAIL: user.email,
         SALT: user.salt,
-        FORGET_PASSWORD_TOKEN: user.forgetPasswordToken
+        FORGET_PASSWORD_TOKEN: user.forgetPasswordToken,
+        AVATAR: user.avatar,
       };
 
       return await this.db.insert('USERS', data);
@@ -78,7 +79,8 @@ class UserModel {
         PASSWORD: user.PASSWORD,
         EMAIL: user.EMAIL,
         SALT: user.SALT,
-        FORGET_PASSWORD_TOKEN: user.FORGET_PASSWORD_TOKEN
+        FORGET_PASSWORD_TOKEN: user.FORGET_PASSWORD_TOKEN,
+        AVATAR: user.AVATAR,
       };
 
       return await this.db.update('USERS', data, 'ID = ?', [id]);
@@ -94,7 +96,6 @@ class UserModel {
         PASSWORD: hashedPassword,
         FORGET_PASSWORD_TOKEN : null,
         FORGET_PASSWORD_TOKEN_EXPIRATION: null,
-  
       };
 
       return await this.db.update('USERS', data, 'ID = ?', [id]);
