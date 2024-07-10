@@ -1,13 +1,16 @@
 import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'sgroupbe',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  port: process.env.PORT_DB,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
 });
 
 pool.getConnection((err, connection) => {
@@ -21,6 +24,8 @@ pool.getConnection((err, connection) => {
         if (err.code === 'ECONNREFUSED') {
         console.error('Database connection was refused.');
         }
+
+
     }
     
     if (connection) connection.release();
@@ -28,5 +33,4 @@ pool.getConnection((err, connection) => {
     return;
     }
 );
-
 export default pool;
