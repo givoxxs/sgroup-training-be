@@ -4,15 +4,14 @@ class UploadController {
     uploadImage = async(req, res, next) => {
         try {
             const id = parseInt(req.user.id);
-            console.log('ID USER: ', id);
 
             const image = req.file.path;
             const result = await cloudinary.uploader.upload(image);
-            console.log('RESULT IN UPLOAD IMAGE: ', result);
             await uploadService.updateUser(id, result);
 
             return res.status(201).send({
-                message: 'Images uploaded successfully!'
+                message: 'Images uploaded successfully!',
+                result: result
             });
         } catch (error) {
             console.log('Upload image error: ', error.message);
@@ -20,18 +19,7 @@ class UploadController {
         }
     }
 
-    uploadFileSingle = async(req, res, next) => {
-        try {
-            const file = req.file;
-            const result = await cloudinary.uploader.upload(file.path);
-            return res.status(201).json(result);
-        } catch (error) {
-            console.log('Upload file error: ', error.message);
-            next(error);
-        }
-    }
-
-    uploadFileMultiple = async(req, res, next) => {
+    uploadImages = async(req, res, next) => {
         try {
             const files = req.files;
             let result = [];
@@ -40,9 +28,83 @@ class UploadController {
                 const resultFile = await cloudinary.uploader.upload(file.path);
                 result.push(resultFile);
             }
-            return res.status(201).json(result);
+
+            return res.status(201).send({
+                message: 'Images uploaded successfully!',
+                result: result
+            });
+        } catch (error) {
+            console.log('Upload images error: ', error.message);
+            next(error);
+        }
+    }
+
+    uploadFile = async(req, res, next) => {
+        try {
+            const file = req.file;
+            const result = await cloudinary.uploader.upload(file.path);
+
+            return res.status(201).send({
+                message: 'File uploaded successfully!',
+                result: result
+            })
         } catch (error) {
             console.log('Upload file error: ', error.message);
+            next(error);
+        }
+    }
+
+    uploadFiles = async(req, res, next) => {
+        try {
+            const files = req.files;
+            let result = [];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const resultFile = await cloudinary.uploader.upload(file.path);
+                result.push(resultFile);
+            }
+
+            return res.status(201).send({
+                message: 'Files uploaded successfully!',
+                result: result
+            });
+        } catch (error) {
+            console.log('Upload file error: ', error.message);
+            next(error);
+        }
+    }
+
+    uploadVideo = async(req, res, next) => {
+        try {
+            const video = req.file.path;
+            const result = await cloudinary.uploader.upload(video);
+
+            return res.status(201).send({
+                message: 'Video uploaded successfully!',
+                result: result
+            });
+        } catch (error) {
+            console.log('Upload video error: ', error.message);
+            next(error);
+        }
+    }
+
+    uploadVideos = async(req, res, next) => {
+        try {
+            const files = req.files;
+            let result = [];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const resultFile = await cloudinary.uploader.upload(file.path);
+                result.push(resultFile);
+            }
+
+            return res.status(201).send({
+                message: 'Videos uploaded successfully!',
+                result: result
+            });
+        } catch (error) {
+            console.log('Upload videos error: ', error.message);
             next(error);
         }
     }

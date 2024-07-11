@@ -13,8 +13,6 @@ class UploadService {
         try {
             const user = await this.userModel.getUserById(id);
 
-            console.log('USER in update: ', user);
-
             if (!user) {
                 return { success: false, status: 404, message: "User not found" };
             }
