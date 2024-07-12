@@ -19,9 +19,10 @@ const imageStorage = new CloudinaryStorage({
 // Cấu hình storage cho file
 const fileStorage = new CloudinaryStorage({
     cloudinary,
-    allowedFormats: ['pdf', 'doc', 'docx', 'xls', 'xlsx'],
     params: {
       folder: 'Sgroup_training_1/files',
+      resource_type: 'raw', 
+      allowedFormats: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt'],
     },
     filename: (req, file, cb) => {
       cb(null, Date.now() + "-" + file.originalname);
@@ -29,15 +30,28 @@ const fileStorage = new CloudinaryStorage({
 });
 
 // Cấu hình storage cho video
+// const videoStorage = new CloudinaryStorage({
+//     cloudinary,
+//     allowedFormats: ['mp4', 'mkv', 'avi'],
+//     resource_type: 'video',
+//     params: {
+//       folder: 'Sgroup_training_1/videos',
+//     },
+//     filename: (req, file, cb) => {
+//       cb(null, Date.now() + "-" + file.originalname);
+//     },
+// });
+
 const videoStorage = new CloudinaryStorage({
-    cloudinary,
-    allowedFormats: ['mp4', 'mkv', 'avi'],
-    params: {
-      folder: 'Sgroup_training_1/videos',
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + "-" + file.originalname);
-    },
+  cloudinary: cloudinary,
+  params: {
+    folder: 'Sgroup_training_1/videos', 
+    resource_type: 'video', 
+    allowedFormats: ['mp4', 'avi', 'mkv'], 
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
 });
 
 const uploadImage = multer({ storage: imageStorage });

@@ -42,7 +42,8 @@ class UploadController {
     uploadFile = async(req, res, next) => {
         try {
             const file = req.file;
-            const result = await cloudinary.uploader.upload(file.path);
+            // const result = await cloudinary.uploader.upload(file.path);
+            const result = await cloudinary.uploader.upload(file.path, { resource_type: 'file' });
 
             return res.status(201).send({
                 message: 'File uploaded successfully!',
@@ -66,7 +67,7 @@ class UploadController {
 
             return res.status(201).send({
                 message: 'Files uploaded successfully!',
-                result: result
+                //result: result
             });
         } catch (error) {
             console.log('Upload file error: ', error.message);
@@ -77,7 +78,7 @@ class UploadController {
     uploadVideo = async(req, res, next) => {
         try {
             const video = req.file.path;
-            const result = await cloudinary.uploader.upload(video);
+            const result = await cloudinary.uploader.upload(video, { resource_type: 'video' });
 
             return res.status(201).send({
                 message: 'Video uploaded successfully!',
@@ -95,7 +96,7 @@ class UploadController {
             let result = [];
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                const resultFile = await cloudinary.uploader.upload(file.path);
+                const resultFile = await cloudinary.uploader.upload(file.path, { resource_type: 'video' });
                 result.push(resultFile);
             }
 
