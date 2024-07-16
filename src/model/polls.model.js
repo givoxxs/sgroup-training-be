@@ -142,7 +142,7 @@ class PollModel {
 
     async deleteOption(id) {
         try {
-            return await this.db.delete('OPTIONS', id);
+            return await this.db.delete('OPTIONS', 'ID = ?', [id]);
         } catch (error) {
             throw error;
         }
