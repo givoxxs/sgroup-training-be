@@ -7,7 +7,7 @@ class UploadController {
 
             const image = req.file.path;
             const result = await cloudinary.uploader.upload(image);
-            await uploadService.updateUser(id, result);
+            // await uploadService.updateUser(id, result);
 
             return res.status(201).send({
                 message: 'Images uploaded successfully!',

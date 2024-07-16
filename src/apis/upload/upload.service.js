@@ -9,21 +9,21 @@ class UploadService {
         this.userIdentityService = new UserIdentityService();
     } 
 
-    updateUser = async (id, result) => {
-        try {
-            const user = await this.userModel.getUserById(id);
+    // updateUser = async (id, result) => {
+    //     try {
+    //         const user = await this.userModel.getUserById(id);
 
-            if (!user) {
-                return { success: false, status: 404, message: "User not found" };
-            }
+    //         if (!user) {
+    //             return { success: false, status: 404, message: "User not found" };
+    //         }
 
-            user.AVATAR = result.url;
-            return await this.userModel.updateUser(id, user);
-            // };
-        } catch (error) {
-            throw error;
-        }
-    }
+    //         user.AVATAR = result.url;
+    //         return await this.userModel.updateUser(id, user);
+    //         // };
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 }
 
 export default new UploadService();
