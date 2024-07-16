@@ -67,7 +67,7 @@ class PollModel {
                 DESCRIPTION: poll.description,
             };
 
-            const result = await this.db.update('POLLS', data, poll.id);
+            const result = await this.db.update('POLLS', data, 'ID = ?', [poll.id]);
 
             await connection.commit();
             return result;
@@ -130,10 +130,11 @@ class PollModel {
     async updateOption(optionId, option) {
         try {
             const data = {
-                OPTION: option,
+                OPTION_TEXT: option,
             };
+            console.log(data);
 
-            return await this.db.update('OPTIONS', data, optionId);
+            return await this.db.update('OPTIONS', data, 'ID = ?',  [optionId]);
         } catch (error) {
             throw error;
         }

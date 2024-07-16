@@ -191,6 +191,7 @@ class PollsController {
             }
 
             const option = req.body.option;
+            console.log(option);
 
             if (!option || option.length === 0) {
                 return res.status(400).send({
