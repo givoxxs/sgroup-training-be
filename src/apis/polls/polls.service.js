@@ -14,6 +14,15 @@ class PollsService {
         }
     }
 
+    async getPollById(id) {
+        try {
+            const poll = await this.pollModel.getPollById(id);
+            return poll;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     async createPoll (poll) {
         try {
             const result = await this.pollModel.createPoll(poll);
@@ -22,7 +31,7 @@ class PollsService {
             throw error;
         }
     }
-
+    
     async updatePoll(poll) {
         try {
             const result = await this.pollModel.updatePoll(poll);
@@ -31,13 +40,31 @@ class PollsService {
             throw error;
         }
     }
-
+    
     async deletePoll(id) {
         try {
             const result = await this.pollModel.deletePoll(id);
             return result;
         } catch (error) {
             throw error
+        }
+    }
+    
+    async getAllOptions(idPoll) {
+        try {
+            const options = await this.pollModel.getAllOptions(idPoll);
+            return options;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    async getOptionById(optionId) {
+        try {
+            const option = await this.pollModel.getOptionById(optionId);
+            return option;
+        } catch (error) {
+            throw error;
         }
     }
 
@@ -50,6 +77,24 @@ class PollsService {
         }
     }
 
+    async updateOption(optionId, option) {
+        try {
+            const result = await this.pollModel.updateOption(optionId, option);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    async deleteOption(optionId) {
+        try {
+            const result = await this.pollModel.deleteOption(optionId);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     async votePoll(userId, optionId) {
         try {
             const result = await this.pollModel.votePoll(userId, optionId);
@@ -58,34 +103,7 @@ class PollsService {
             throw error;
         }
     }
-
-    async getOptionById(optionId) {
-        try {
-            const option = await this.pollModel.getOptionById(optionId);
-            return option;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async checkUserVote(optionId, userId) {
-        try {
-            const option = await this.pollModel.checkUserVote(optionId, userId);
-            return option;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async getPollById(id) {
-        try {
-            const poll = await this.pollModel.getPollById(id);
-            return poll;
-        } catch (error) {
-            throw error;
-        }
-    }
-
+    
     async unVotePoll(optionId, userid) {
         try {
             const result = await this.pollModel.unVotePoll(optionId, userid);
@@ -95,10 +113,10 @@ class PollsService {
         }
     }
 
-    async getAllOptions(idPoll) {
+    async checkUserVote(optionId, userId) {
         try {
-            const options = await this.pollModel.getAllOptions(idPoll);
-            return options;
+            const option = await this.pollModel.checkUserVote(optionId, userId);
+            return option;
         } catch (error) {
             throw error;
         }

@@ -127,13 +127,13 @@ class PollModel {
         }
     }
 
-    async updateOption(option) {
+    async updateOption(optionId, option) {
         try {
             const data = {
-                OPTION: option.option,
+                OPTION: option,
             };
 
-            return await this.db.update('OPTIONS', data, option.id);
+            return await this.db.update('OPTIONS', data, optionId);
         } catch (error) {
             throw error;
         }

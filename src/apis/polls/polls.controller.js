@@ -156,11 +156,56 @@ class PollsController {
     }
 
     async deleteOption(req, res, next) {
+        try {
+            const optionId = req.params.id;
+            if (!optionId) {
+                return res.status(400).send({
+                    message: "Option ID are required",
+                });
+            }
 
+            const option = await PollsService.getOptionById(optionId);
+            if (!option) {
+                return res.status(400).send({
+                    message: "Option not found",
+                });
+            }
+
+            const result = await PollsService.deleteOption(optionId);
+            return res.status(200).send({
+                message: "Option deleted successfully",
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 
     async updateOption(req, res, next) {
+        try {
+            const optionId = req.params.id;
+            if (!optionId) {
+                return res.status(400).send({
+                    message: "Option ID are required",
+                });
+            }
 
+            const option = req.body.option;
+
+            if (!option || option.length === 0) {
+                return res.status(400).send({
+                    message: "Option are required",
+                });
+            }
+
+            const result = await PollsService.updateOption(optionId, option);
+            return res.status(200).send({
+                message: "Option updated successfully",
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 
     async votePoll(req, res, next) {

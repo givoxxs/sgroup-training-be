@@ -11,8 +11,8 @@ router.delete('/delete/:id', verifyMiddleware.verify, PollsController.deletePoll
 router.get('/detail-poll/:id', verifyMiddleware.verify, PollsController.getDetailPoll);
 
 router.post('/:id/option', verifyMiddleware.verify, PollsController.createOption);
-// router.put('/updatePollOption/:id', PollsController.updateOption);
-// router.delete('/deletePollOption/:id', PollsController.deleteOption);
+router.put('/option/:id', verifyMiddleware.verify, PollsController.updateOption);
+router.delete('/option/:id', verifyMiddleware.verify, PollsController.deleteOption);
 
 router.post('/vote/:idOption', verifyMiddleware.verify, PollsController.votePoll);
 router.delete('/vote/:idOption', verifyMiddleware.verify, PollsController.unVotePoll);
