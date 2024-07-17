@@ -130,6 +130,15 @@ class PollsService {
             throw error;
         }
     }
+
+    async checkUserVote(optionId, userId) {
+        try {
+            const votes = await this.pollModel.checkUserVote(optionId, userId);
+            return votes;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default new PollsService();

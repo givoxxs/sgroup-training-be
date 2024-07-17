@@ -275,6 +275,37 @@ class PollsController {
             next(error);
         }
     }
+
+    async multiVoteUnvote(req, res, next) {
+        try {
+            const options = req.body.options;
+            if (!options || options.length === 0) {
+                return res.status(400).send({
+                    message: "Options are required",
+                });
+            }
+
+            for (const option of options) {
+                if (option.vote) {
+                    const checkVote = await PollsService.checkUserVote(option.id, req.user.id);
+                    if (!checkVote) {
+                        await PollsService.votePoll(req.user.id, option.id);
+                    }
+                } else {
+                    const checkVote = await PollsService.checkUserVote(option.id, req.user.id);
+                    if (checkVote) {
+                        await PollsService.unVotePoll(option.id, req.user.id);
+                    }
+                }
+            }
+
+            return res.status(200).send({
+                message: "Vote/Unvote submitted successfully",
+            });
+        } catch (error) {
+            next(error);
+        }
+    } 
 }
 
 export default new PollsController();

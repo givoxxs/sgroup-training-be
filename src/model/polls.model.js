@@ -204,6 +204,15 @@ class PollModel {
             throw error;
         }
     }
+
+    async checkUserVote(optionId, userId) {
+        try {
+            const votes = await this.db.select('SELECT * FROM VOTES WHERE OPTION_ID = ? AND USER_ID = ?', [optionId, userId]);
+            return votes[0];
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default PollModel;

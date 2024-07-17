@@ -16,6 +16,7 @@ router.delete('/option/:id', verifyMiddleware.verify, PollsController.deleteOpti
 
 router.post('/vote/:idOption', verifyMiddleware.verify, PollsController.votePoll);
 router.delete('/vote/:idOption', verifyMiddleware.verify, PollsController.unVotePoll);
+router.post('/multiVote', verifyMiddleware.verify, PollsController.multiVoteUnvote);
 
 
 
