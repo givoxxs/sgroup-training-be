@@ -1,4 +1,4 @@
-import pool from "./config";
+import pool from "../config/dbConfig";
 
 
 class Database {
@@ -15,7 +15,7 @@ class Database {
   async insert(table, data) {
     try {
       const result = await pool.query(`INSERT INTO ${table} SET ?`, [data]);
-      return result.insertId;
+      return result[0].insertId;
     } catch (error) {
       console.error(`Error executing insert query for table ${table}:`, error);
       throw error;
