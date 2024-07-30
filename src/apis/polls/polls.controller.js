@@ -209,6 +209,38 @@ class PollsController {
         }
     }
 
+    async multiOption(req, res, next) {
+        try {
+            const pollId = req.params.id;
+            if (!pollId) {
+                return res.status(400).send({
+                    message: "Poll ID is required",
+                });
+            }
+
+            const options = req.body.options;
+            if (!options || options.length === 0) {
+                return res.status(400).send({
+                    message: "Options are required",
+                });
+            }
+
+            for (const option of options) {
+                if (option.id) {
+                    await PollsService.updateOption(option.id, option.option);
+                } else {
+                    await PollsService.createOption(pollId, option.option);
+                }
+            }
+
+            return res.status(200).send({
+                message: "Options submitted successfully",
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async votePoll(req, res, next) {
         const optionId = req.params.idOption;
         try {

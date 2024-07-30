@@ -13,11 +13,10 @@ router.get('/detail-poll/:id', verifyMiddleware.verify, PollsController.getDetai
 router.post('/:id/option', verifyMiddleware.verify, PollsController.createOption);
 router.put('/option/:id', verifyMiddleware.verify, PollsController.updateOption);
 router.delete('/option/:id', verifyMiddleware.verify, PollsController.deleteOption);
+router.post('/:id/multi-option', verifyMiddleware.verify, PollsController.multiOption);
 
 router.post('/vote/:idOption', verifyMiddleware.verify, PollsController.votePoll);
 router.delete('/vote/:idOption', verifyMiddleware.verify, PollsController.unVotePoll);
 router.post('/multiVote', verifyMiddleware.verify, PollsController.multiVoteUnvote);
-
-
 
 export default router;

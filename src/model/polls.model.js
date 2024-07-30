@@ -43,7 +43,7 @@ class PollModel {
                 }));
                 
                 for (const option of optionsRecords) {
-                    await this.db.insert('options', option);
+                    await this.db.insert('OPTIONS', option);
                 }
             }
                 
